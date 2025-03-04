@@ -17,16 +17,19 @@ class Spritesheet:
         ]
         self.current_frame = (0, 0)  # (row, col)
 
-    def draw(self, canvas, position, rotation=0):
+    def draw(self, canvas, position, rotation=0, scale=1):
         center_x, center_y = self.frame_centers[self.current_frame[0]][self.current_frame[1]]
         # Check if position is a Vector and convert to tuple if needed
         if hasattr(position, 'x') and hasattr(position, 'y'):
             position = (position.x, position.y)
     
-        # Draw the image with rotation
+        # Draw the image with rotation and scale
         canvas.draw_image(self.sprite_image,
-                        (center_x, center_y), (self.frame_width, self.frame_height),
-                        position, (self.frame_width, self.frame_height), rotation)
+                        (center_x, center_y), 
+                        (self.frame_width, self.frame_height),
+                        position, 
+                        (self.frame_width * scale, self.frame_height * scale), 
+                        rotation)
 
     def next_frame(self):
         row, col = self.current_frame
