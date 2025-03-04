@@ -14,7 +14,7 @@ class PacMan:
         self.current_direction = None  # No initial direction
         self.spriteimgs = Spritesheet(spriteimgs, rows, columns)
         self.speed = 1.5  # Keep the 2x speed from previous update
-        self.radius = 20  # Increased from 16 to 20
+        self.radius = 16  # Increased from 16 to 20
 
     def draw(self, canvas):
         # Convert Vector to tuple
@@ -36,10 +36,10 @@ class PacMan:
         elif self.keys.down:
             self.current_direction = "down"
             self.keys.down = False  # Reset key state after reading
-        
+    
         # Apply velocity based on current direction
         self.vel = Vector(0, 0)  # Reset velocity
-        
+    
         if self.current_direction == "right":
             self.vel = Vector(self.speed, 0)
             self.rotation = 0
@@ -52,29 +52,22 @@ class PacMan:
         elif self.current_direction == "down":
             self.vel = Vector(0, self.speed)
             self.rotation = math.pi / 2
-        
+    
         # Update position
         self.pos.add(self.vel)
-        
-        # Add boundary checks
-        if self.pos.x < 0:
-            self.pos.x = 0
-        elif self.pos.x > 448:  # Use 2x original CANVAS_WIDTH
-            self.pos.x = 448
-        if self.pos.y < 0:
-            self.pos.y = 0
-        elif self.pos.y > 512:  # Use 2x original CANVAS_HEIGHT
-            self.pos.y = 512
     
-        # Add wrap-around boundary conditions
-        if self.pos.x < 0:
-            self.pos.x = 468  # 2x original wrap point
-        elif self.pos.x > 448:  # Use 2x original CANVAS_WIDTH
-            self.pos.x = -20  # 2x original wrap point
-        if self.pos.y < 0:
-            self.pos.y = 532  # 2x original wrap point
-        elif self.pos.y > 512:  # Use 2x original CANVAS_HEIGHT
-            self.pos.y = -20  # 2x original wrap point
+        # Simplified wrap-around logic
+        # Horizontal wrap
+        if self.pos.x > 448:  # Right edge
+            self.pos.x = 0
+        elif self.pos.x < 0:  # Left edge
+            self.pos.x = 448
+    
+        # Vertical wrap
+        if self.pos.y > 512:  # Bottom edge
+            self.pos.y = 0
+        elif self.pos.y < 0:  # Top edge
+            self.pos.y = 512
 
     def next_frame(self):
         self.spriteimgs.next_frame()

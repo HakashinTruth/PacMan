@@ -30,13 +30,13 @@ class MapGenerator:
 
                     # Create walls for each side of the block
                     # Left wall
-                    self.walls.append(Wall(x1, y1, x1, y2, 0.5, 'blue', 'l'))
+                    self.walls.append(Wall(x1, y1, x1, y2))
                     # Right wall
-                    self.walls.append(Wall(x2, y1, x2, y2, 0.5, 'blue', 'r'))
+                    self.walls.append(Wall(x2, y1, x2, y2))
                     # Top wall
-                    self.walls.append(Wall(x1, y1, x2, y1, 0.5, 'blue', 't'))
+                    self.walls.append(Wall(x1, y1, x2, y1))
                     # Bottom wall
-                    self.walls.append(Wall(x1, y2, x2, y2, 0.5, 'blue', 'b'))
+                    self.walls.append(Wall(x1, y2, x2, y2))
 
     def draw_walls(self, canvas):
         for wall in self.walls:

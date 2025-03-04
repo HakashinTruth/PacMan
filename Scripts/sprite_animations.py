@@ -1,5 +1,6 @@
 import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 import os
+
 class Spritesheet:
     def __init__(self, sprite_url, rows, columns):
         self.sprite_image = simplegui.load_image(sprite_url)

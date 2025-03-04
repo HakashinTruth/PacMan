@@ -41,21 +41,20 @@ class Interaction:
                 self.pacman.stop()
                 self.last_collision = wall
                 
-                # Precise wall collision handling
-                if wall.rightleft == 'l':
-                    # Push Pac-Man slightly to the right of the left wall
-                    self.pacman.pos.x = wall.x1 + self.pacman.radius + 1
-                elif wall.rightleft == 'r':
-                    # Push Pac-Man slightly to the left of the right wall
-                    self.pacman.pos.x = wall.x1 - self.pacman.radius - 1
-                elif wall.rightleft == 't':
-                    # Push Pac-Man slightly below the top wall
-                    self.pacman.pos.y = wall.y1 + self.pacman.radius + 1
-                elif wall.rightleft == 'b':
-                    # Push Pac-Man slightly above the bottom wall
-                    self.pacman.pos.y = wall.y1 - self.pacman.radius - 1
+                # Broad collision handling
+                if wall.x1 == wall.x2:  # Vertical wall
+                    if self.pacman.pos.x < wall.x1:
+                        self.pacman.pos.x = wall.x1 - self.pacman.radius
+                    else:
+                        self.pacman.pos.x = wall.x1 + self.pacman.radius
+                else:  # Horizontal wall
+                    if self.pacman.pos.y < wall.y1:
+                        self.pacman.pos.y = wall.y1 - self.pacman.radius
+                    else:
+                        self.pacman.pos.y = wall.y1 + self.pacman.radius
                 
                 break  # Stop checking after first collision
+
 class Clock:
     def __init__(self, time=0):
         self.time = time
@@ -68,9 +67,10 @@ class Clock:
             self.time = 0
             return True
         return False
+
+# Constants
 CANVAS_WIDTH = 448  # 2x original 224
 CANVAS_HEIGHT = 512  # 2x original 256
-# Constants (adjust frame duration for smoother animation)
 FRAME_DURATION = 10  # Higher = slower animation
 
 # Keyboard and game setup
@@ -78,12 +78,18 @@ kbd = Keyboard()
 clock = Clock()
 pacman = PacMan(Vector(224, 280), Vector(0, 0), kbd, "https://i.postimg.cc/Z0k4dWCw/PacMan.png", 1, 8)
 
-# Updated wall creation to cover all sides of the game area
+# Wall creation
 walls = [
-    Wall(0, 0, 0, CANVAS_HEIGHT, 10, 'blue', 'l'),     # Left wall
-    Wall(CANVAS_WIDTH, 0, CANVAS_WIDTH, CANVAS_HEIGHT, 10, 'blue', 'r'),  # Right wall
-    Wall(0, 0, CANVAS_WIDTH, 0, 10, 'blue', 't'),      # Top wall
-    Wall(0, CANVAS_HEIGHT, CANVAS_WIDTH, CANVAS_HEIGHT, 10, 'blue', 'b')  # Bottom wall
+    Wall(0, 0, 0, CANVAS_HEIGHT/3),  # Left wall
+    Wall(0, 2*CANVAS_HEIGHT/3, 0, CANVAS_HEIGHT),  # LEFT WALL
+    Wall(CANVAS_WIDTH, 0, CANVAS_WIDTH, CANVAS_HEIGHT/3), 
+    Wall(CANVAS_WIDTH, 2*CANVAS_HEIGHT/3, CANVAS_WIDTH, CANVAS_HEIGHT),
+    Wall(0, 0, CANVAS_WIDTH, 0),  # Top wall
+    Wall(0, CANVAS_HEIGHT, CANVAS_WIDTH, CANVAS_HEIGHT),  # Bottom wall
+    Wall(0, CANVAS_HEIGHT/3, CANVAS_WIDTH/5, CANVAS_HEIGHT/3),  # Bottom middle section left
+    Wall(4*CANVAS_WIDTH/5, CANVAS_HEIGHT/3, CANVAS_WIDTH, CANVAS_HEIGHT/3),  # Bottom middle section right
+    Wall(0, 2*CANVAS_HEIGHT/3, CANVAS_WIDTH/5, 2*CANVAS_HEIGHT/3),  # Top middle section left
+    Wall(4*CANVAS_WIDTH/5, 2*CANVAS_HEIGHT/3, CANVAS_WIDTH, 2*CANVAS_HEIGHT/3)  # Top middle section right
 ]
 
 interaction = Interaction(pacman, kbd, walls)
