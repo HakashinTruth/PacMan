@@ -13,8 +13,14 @@ class PacMan:
         self.rotation = 0  # Initialize rotation (0 = facing right)
         self.current_direction = None  # No initial direction
         self.spriteimgs = Spritesheet(spriteimgs, rows, columns)
-        self.speed = 1.5  # Keep the 2x speed from previous update
+        self.speed = 2  # Keep the 2x speed from previous update
         self.radius = 16  # Increased from 16 to 20
+        
+        # Input rate control variables
+        self.input_frame_counter = 0
+        self.main_fps = 60  # Assuming main game runs at 60fps
+        self.input_fps = 30   # Target input processing rate
+        self.input_interval = self.main_fps // self.input_fps
 
     def draw(self, canvas):
         # Convert Vector to tuple
@@ -22,21 +28,33 @@ class PacMan:
         # Pass rotation to the draw method
         self.spriteimgs.draw(canvas, pos_tuple, self.rotation, scale=1.25)  # Slightly larger scale
 
+    def process_input(self):
+        # Increment frame counter
+        self.input_frame_counter += 1
+        
+        # Only process input at the desired rate (every 4 frames for 15fps if main game is 60fps)
+        if self.input_frame_counter >= self.input_interval:
+            # Reset counter
+            self.input_frame_counter = 0
+            
+            # Check for new direction input
+            if self.keys.right:
+                self.current_direction = "right"
+                self.keys.right = False  # Reset key state after reading
+            elif self.keys.left:
+                self.current_direction = "left"
+                self.keys.left = False  # Reset key state after reading
+            elif self.keys.up:
+                self.current_direction = "up"
+                self.keys.up = False  # Reset key state after reading
+            elif self.keys.down:
+                self.current_direction = "down"
+                self.keys.down = False  # Reset key state after reading
+
     def update(self):
-        # Check for new direction input
-        if self.keys.right:
-            self.current_direction = "right"
-            self.keys.right = False  # Reset key state after reading
-        elif self.keys.left:
-            self.current_direction = "left"
-            self.keys.left = False  # Reset key state after reading
-        elif self.keys.up:
-            self.current_direction = "up"
-            self.keys.up = False  # Reset key state after reading
-        elif self.keys.down:
-            self.current_direction = "down"
-            self.keys.down = False  # Reset key state after reading
-    
+        # Process input at controlled rate
+        self.process_input()
+        
         # Apply velocity based on current direction
         self.vel = Vector(0, 0)  # Reset velocity
     

@@ -3,7 +3,7 @@ import math
 from MyPac import PacMan
 from utils import Vector
 from walls import Wall
-
+from map_generator import MapGenerator
 class Keyboard:
     def __init__(self):
         self.right = False
@@ -76,7 +76,7 @@ FRAME_DURATION = 10  # Higher = slower animation
 # Keyboard and game setup
 kbd = Keyboard()
 clock = Clock()
-pacman = PacMan(Vector(224, 280), Vector(0, 0), kbd, "https://i.postimg.cc/Z0k4dWCw/PacMan.png", 1, 8)
+pacman = PacMan(Vector(224, 300), Vector(0, 0), kbd, "https://i.postimg.cc/Z0k4dWCw/PacMan.png", 1, 8)
 
 # Wall creation
 walls = [
@@ -91,7 +91,6 @@ walls = [
     Wall(0, 2*CANVAS_HEIGHT/3, CANVAS_WIDTH/5, 2*CANVAS_HEIGHT/3),  # Top middle section left
     Wall(4*CANVAS_WIDTH/5, 2*CANVAS_HEIGHT/3, CANVAS_WIDTH, 2*CANVAS_HEIGHT/3)  # Top middle section right
 ]
-
 interaction = Interaction(pacman, kbd, walls)
 
 def draw(canvas):
@@ -101,7 +100,8 @@ def draw(canvas):
     clock.tick()
     if clock.transition(FRAME_DURATION):
         pacman.next_frame()
-    pacman.update()  # Handle movement and direction here
+    # Handle movement and direction here
+    pacman.update()
     pacman.draw(canvas)
 
 # Create frame and start the game
