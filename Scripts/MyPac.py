@@ -4,8 +4,10 @@ from utils import Vector
 import math
 
 class PacMan:
-    def __init__(self, pos, vel, keys, spriteimgs, rows, columns):
+    def __init__(self, pos, vel, keys, spriteimgs, rows, columns,width,height):
         print("PacMan initialized!")
+        self.width=width
+        self.height=height
         self.pos = pos
         self.vel = Vector(0, 0)  # Start with zero velocity
         self.keys = keys
@@ -76,16 +78,16 @@ class PacMan:
     
         # Simplified wrap-around logic
         # Horizontal wrap
-        if self.pos.x > 448:  # Right edge
+        if self.pos.x > self.width:  # Right edge
             self.pos.x = 0
         elif self.pos.x < 0:  # Left edge
-            self.pos.x = 448
+            self.pos.x = self.width
     
         # Vertical wrap
-        if self.pos.y > 512:  # Bottom edge
+        if self.pos.y > self.height:  # Bottom edge
             self.pos.y = 0
         elif self.pos.y < 0:  # Top edge
-            self.pos.y = 512
+            self.pos.y = self.height
 
     def next_frame(self):
         self.spriteimgs.next_frame()

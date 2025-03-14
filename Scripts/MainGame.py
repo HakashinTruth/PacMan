@@ -24,7 +24,7 @@ class Keyboard:
             self.down = True
 
 class Interaction:
-    def __init__(self, pacman, keyboard, walls):
+    def __init__(self, pacman, keyboard, walls, squares):
         self.pacman = pacman
         self.keyboard = keyboard
         self.walls = walls
@@ -69,16 +69,42 @@ class Clock:
         return False
 
 # Constants
-CANVAS_WIDTH = 448  # 2x original 224
-CANVAS_HEIGHT = 512  # 2x original 256
+#this also fixes jitter problem
+CANVAS_WIDTH = 640  # 2x original 224
+CANVAS_HEIGHT = 695  # 2x original 256
 FRAME_DURATION = 10  # Higher = slower animation
-
+arr=[ 
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+    [1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1],
+    [1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1],
+    [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+    [1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1],
+    [1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1],
+    [1, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1],
+    [0, 0, 0, 0, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 0, 0, 0, 0],
+    [1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 2, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1],
+    [2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2],
+    [1, 1, 1, 1, 1, 2, 1, 2, 1, 2, 2, 2, 1, 2, 1, 2, 1, 1, 1, 1, 1],
+    [0, 0, 0, 0, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 2, 1, 0, 0, 0, 0],
+    [0, 0, 0, 0, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 0, 0, 0, 0],
+    [1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1, 1],
+    [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+    [1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1],
+    [1, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1],
+    [1, 1, 2, 2, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 2, 1, 2, 2, 1, 1],
+    [1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1],
+    [1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1],
+    [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+]
 # Keyboard and game setup
 kbd = Keyboard()
 clock = Clock()
-pacman = PacMan(Vector(224, 300), Vector(0, 0), kbd, "https://i.postimg.cc/Z0k4dWCw/PacMan.png", 1, 8)
-
+pacman = PacMan(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0, 0), kbd, "https://i.postimg.cc/Z0k4dWCw/PacMan.png", 1, 8,CANVAS_WIDTH,CANVAS_HEIGHT)
+Mg = MapGenerator(arr, CANVAS_WIDTH, CANVAS_HEIGHT)
 # Wall creation
+'''
 walls = [
     Wall(0, 0, 0, CANVAS_HEIGHT/3),  # Left wall
     Wall(0, 2*CANVAS_HEIGHT/3, 0, CANVAS_HEIGHT),  # LEFT WALL
@@ -90,13 +116,16 @@ walls = [
     Wall(4*CANVAS_WIDTH/5, CANVAS_HEIGHT/3, CANVAS_WIDTH, CANVAS_HEIGHT/3),  # Bottom middle section right
     Wall(0, 2*CANVAS_HEIGHT/3, CANVAS_WIDTH/5, 2*CANVAS_HEIGHT/3),  # Top middle section left
     Wall(4*CANVAS_WIDTH/5, 2*CANVAS_HEIGHT/3, CANVAS_WIDTH, 2*CANVAS_HEIGHT/3)  # Top middle section right
-]
-interaction = Interaction(pacman, kbd, walls)
+]'''
+interaction = Interaction(pacman, kbd, Mg.walls,Mg.square)
 
 def draw(canvas):
     interaction.update()
-    for wall in walls:
+    for wall in Mg.walls:
         wall.draw(canvas)
+    for sq in Mg.square:
+        sq.draw(canvas)
+
     clock.tick()
     if clock.transition(FRAME_DURATION):
         pacman.next_frame()

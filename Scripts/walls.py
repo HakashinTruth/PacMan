@@ -3,16 +3,21 @@ from utils import Vector
 import math
 
 class Wall:
-    def __init__(self, x1, y1, x2, y2, border=.5, color='blue'):
+    def __init__(self, x1, y1, x2, y2,cell_height,cell_width, border, color):
         self.x1 = x1
         self.y1 = y1
         self.x2 = x2
         self.y2 = y2
         self.border = border
         self.color = color
+        self.cellHeight=cell_height
+        self.cellWidth=cell_width
 
     def draw(self, canvas):
-        canvas.draw_line((self.x1, self.y1), (self.x2, self.y2), self.border * 2 + 1, self.color)
+        
+        
+        canvas.draw_polygon([(self.x1,self.y1),(self.x2,self.y1),(self.x2,self.y2),(self.x1,self.y2)],self.border,self.color,self.color)
+        #canvas.draw_line((self.x1, self.y1), (self.x2, self.y2), self.border * 2 + 1, self.color)
     '''
     def hit(self, pacman):
         # Use Pac-Man's radius for collision detection
