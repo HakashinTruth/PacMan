@@ -101,7 +101,7 @@ arr=[
 # Keyboard and game setup
 kbd = Keyboard()
 clock = Clock()
-pacman = PacMan(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0, 0), kbd, "https://i.postimg.cc/Z0k4dWCw/PacMan.png", 1, 8,CANVAS_WIDTH,CANVAS_HEIGHT)
+pacman = PacMan(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0, 0), kbd, "/Users/dreniskastrati/Downloads/PacManProject/PacMan/pacmanPack/PacMan.png", 1, 8,CANVAS_WIDTH,CANVAS_HEIGHT)
 Mg = MapGenerator(arr, CANVAS_WIDTH, CANVAS_HEIGHT)
 # Wall creation
 '''
