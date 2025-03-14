@@ -77,7 +77,7 @@ class Wall:
         pac_radius = pacman.radius
         if pacman.current_direction == "right":
             x_collision = (abs(pacman.pos.x - self.x1) <= pac_radius)
-            y_inside = (min(self.y1, self.y2) <= (pacman.pos.y ) or (pacman.pos.y ) <= max(self.y1, self.y2))
+            y_inside = (min(self.y1, self.y2) <= (pacman.pos.y + pacman.radius) or (pacman.pos.y - pacman.radius) <= max(self.y1, self.y2))
             pacman.stop()
             return y_inside > 0 and x_collision > 0
         elif pac_direction == "left":
