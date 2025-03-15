@@ -5,6 +5,9 @@ from utils import Vector
 from walls import Wall
 from map_generator import MapGenerator
 from Ghosts import Ghost
+from green_ghost import GreenGhost
+from other_ghosts import OtherGhost
+
 class Keyboard:
     def __init__(self):
         self.right = False
@@ -25,9 +28,9 @@ class Keyboard:
             self.down = True
 
 class Interaction:
-    def __init__(self, pacman, ghost, keyboard, walls, squares):
+    def __init__(self, pacman, ghosts, keyboard, walls, squares):
         self.pacman = pacman
-        self.ghost = ghost
+        self.ghosts = ghosts
         self.keyboard = keyboard
         self.walls = walls
         self.last_collision = None  # Track the last wall collided with
@@ -59,24 +62,25 @@ class Interaction:
                 break  # Stop checking after first collision
         
         for wall in self.walls:
-            if wall.hit(self.ghost):
-                # Stop Pac-Man when hitting a wall
-                self.ghost.stop()
-                self.last_collision = wall
-                
-                
-                # Broad collision handling
-                if wall.x1 == wall.x2:  # Vertical wall
-                    if self.ghost.pos.x < wall.x1:
-                        self.ghost.pos.x = wall.x1 - self.ghost.radius
-                    else:
-                        self.ghost.pos.x = wall.x1 + self.ghost.radius
-                else:  # Horizontal wall
-                    if self.ghost.pos.y < wall.y1:
-                        self.ghost.pos.y = wall.y1 - self.ghost.radius
-                    else:
-                        self.ghost.pos.y = wall.y1 + self.ghost.radius
-                break
+            for ghost in self.ghosts:
+                if wall.hit(ghost):
+                    # Stop Pac-Man when hitting a wall
+                    ghost.stop()
+                    self.last_collision = wall
+                    
+                    
+                    # Broad collision handling
+                    if wall.x1 == wall.x2:  # Vertical wall
+                        if ghost.pos.x < wall.x1:
+                            ghost.pos.x = wall.x1 - ghost.radius
+                        else:
+                            ghost.pos.x = wall.x1 + ghost.radius
+                    else:  # Horizontal wall
+                        if ghost.pos.y < wall.y1:
+                            ghost.pos.y = wall.y1 - ghost.radius
+                        else:
+                            ghost.pos.y = wall.y1 + ghost.radius
+                    break
 
                 
 class Clock:
@@ -125,7 +129,12 @@ arr=[
 # Keyboard and game setup
 kbd = Keyboard()
 clock = Clock()
-ghost = Ghost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(1,0), "/Users/dreniskastrati/Downloads/PacManProject/PacMan/pacmanPack/greenGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
+greenGhost = GreenGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(1,0), "/Users/dreniskastrati/Downloads/PacManProject/PacMan/pacmanPack/greenGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
+blueGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(1,0), "/Users/dreniskastrati/Downloads/PacManProject/PacMan/pacmanPack/blueGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
+redGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(1,0), "/Users/dreniskastrati/Downloads/PacManProject/PacMan/pacmanPack/redGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
+orangeGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(1,0), "/Users/dreniskastrati/Downloads/PacManProject/PacMan/pacmanPack/orangeGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
+
+Ghosts = [greenGhost, blueGhost, redGhost, orangeGhost]
 pacman = PacMan(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/5), Vector(0, 0), kbd, "/Users/dreniskastrati/Downloads/PacManProject/PacMan/pacmanPack/PacMan.png", 1, 8,CANVAS_WIDTH,CANVAS_HEIGHT)
 Mg = MapGenerator(arr, CANVAS_WIDTH, CANVAS_HEIGHT)
 # Wall creation
@@ -142,7 +151,7 @@ walls = [
     Wall(0, 2*CANVAS_HEIGHT/3, CANVAS_WIDTH/5, 2*CANVAS_HEIGHT/3),  # Top middle section left
     Wall(4*CANVAS_WIDTH/5, 2*CANVAS_HEIGHT/3, CANVAS_WIDTH, 2*CANVAS_HEIGHT/3)  # Top middle section right
 ]'''
-interaction = Interaction(pacman, ghost, kbd, Mg.walls,Mg.square)
+interaction = Interaction(pacman, Ghosts, kbd, Mg.walls,Mg.square)
 
 def draw(canvas):
     interaction.update()
@@ -156,8 +165,13 @@ def draw(canvas):
         pacman.next_frame()
     # Handle movement and direction here
     
-    ghost.update(pacman)
-    ghost.draw(canvas)
+    for ghost in Ghosts:
+        if type(ghost) == GreenGhost:
+            ghost.update(pacman)
+        else:
+            ghost.update()
+        ghost.draw(canvas)
+
     pacman.update()
     pacman.draw(canvas)
 
