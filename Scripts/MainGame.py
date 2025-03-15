@@ -4,6 +4,7 @@ from MyPac import PacMan
 from utils import Vector
 from walls import Wall
 from map_generator import MapGenerator
+from Ghosts import Ghost
 class Keyboard:
     def __init__(self):
         self.right = False
@@ -24,8 +25,9 @@ class Keyboard:
             self.down = True
 
 class Interaction:
-    def __init__(self, pacman, keyboard, walls, squares):
+    def __init__(self, pacman, ghost, keyboard, walls, squares):
         self.pacman = pacman
+        self.ghost = ghost
         self.keyboard = keyboard
         self.walls = walls
         self.last_collision = None  # Track the last wall collided with
@@ -55,6 +57,25 @@ class Interaction:
                         self.pacman.pos.y = wall.y1 + self.pacman.radius
                 
                 break  # Stop checking after first collision
+
+            if wall.hit(self.ghost):
+                # Stop Pac-Man when hitting a wall
+                self.ghost.stop()
+                self.last_collision = wall
+                
+                
+                # Broad collision handling
+                if wall.x1 == wall.x2:  # Vertical wall
+                    if self.ghost.pos.x < wall.x1:
+                        self.ghost.pos.x = wall.x1 - self.ghost.radius
+                    else:
+                        self.ghost.pos.x = wall.x1 + self.ghost.radius
+                else:  # Horizontal wall
+                    if self.ghost.pos.y < wall.y1:
+                        self.ghost.pos.y = wall.y1 - self.ghost.radius
+                    else:
+                        self.ghost.pos.y = wall.y1 + self.ghost.radius
+
                 
 class Clock:
     def __init__(self, time=0):
@@ -102,7 +123,8 @@ arr=[
 # Keyboard and game setup
 kbd = Keyboard()
 clock = Clock()
-pacman = PacMan(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0, 0), kbd, "/Users/dreniskastrati/Downloads/PacManProject/PacMan/pacmanPack/PacMan.png", 1, 8,CANVAS_WIDTH,CANVAS_HEIGHT)
+ghost = Ghost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(1,0), "/Users/dreniskastrati/Downloads/PacManProject/PacMan/pacmanPack/greenGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
+pacman = PacMan(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/5), Vector(0, 0), kbd, "/Users/dreniskastrati/Downloads/PacManProject/PacMan/pacmanPack/PacMan.png", 1, 8,CANVAS_WIDTH,CANVAS_HEIGHT)
 Mg = MapGenerator(arr, CANVAS_WIDTH, CANVAS_HEIGHT)
 # Wall creation
 '''
@@ -118,7 +140,7 @@ walls = [
     Wall(0, 2*CANVAS_HEIGHT/3, CANVAS_WIDTH/5, 2*CANVAS_HEIGHT/3),  # Top middle section left
     Wall(4*CANVAS_WIDTH/5, 2*CANVAS_HEIGHT/3, CANVAS_WIDTH, 2*CANVAS_HEIGHT/3)  # Top middle section right
 ]'''
-interaction = Interaction(pacman, kbd, Mg.walls,Mg.square)
+interaction = Interaction(pacman, ghost, kbd, Mg.walls,Mg.square)
 
 def draw(canvas):
     interaction.update()
@@ -132,7 +154,9 @@ def draw(canvas):
         pacman.next_frame()
     # Handle movement and direction here
     pacman.update()
+    ghost.update(pacman)
     pacman.draw(canvas)
+    ghost.draw(canvas)
 
 # Create frame and start the game
 frame = simplegui.create_frame('PacMan', CANVAS_WIDTH, CANVAS_HEIGHT)

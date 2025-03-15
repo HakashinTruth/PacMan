@@ -3,8 +3,8 @@ from sprite_animations import Spritesheet
 from utils import Vector
 import math
 
-class ghosts:
-    def __init__(self, pos, spriteimgs, rows, columns, width, height):
+class Ghost:
+    def __init__(self, pos, vel, spriteimgs, rows, columns, width, height):
         print("Ghost initialized!")
         self.width = width
         self.height = height
@@ -28,7 +28,7 @@ class ghosts:
         # Pass rotation to the draw method
         self.spriteimgs.draw(canvas, pos_tuple, scale=1.25)
     
-    def process_input(self):
+    def process_input(self, pacman):
         # Increment frame counter
         self.input_frame_counter += 1
         
@@ -37,9 +37,43 @@ class ghosts:
             # Reset counter
             self.input_frame_counter = 0
 
-    def update(self):
+            if pacman.vel == Vector(0,0):
+
+                x_difference = abs(pacman.pos.x - self.pos.x)
+                y_difference = abs(pacman.pos.y - self.pos.y)
+
+                if (pacman.pos.x <= self.pos.x) and (pacman.pos.y <= self.pos.y):
+
+                    if x_difference >= y_difference:
+                        self.current_direction = "left"
+                    else:
+                        self.current_direction = "up"
+
+                if (pacman.pos.x >= self.pos.x) and (pacman.pos.y <= self.pos.y):
+
+                    if x_difference >= y_difference:
+                        self.current_direction = "right"
+                    else:
+                        self.current_direction = "up"
+
+                if (pacman.pos.x <= self.pos.x) and (pacman.pos.y >= self.pos.y):
+
+                    if x_difference >= y_difference:
+                        self.current_direction = "left"
+                    else:
+                        self.current_direction = "down"
+                
+                if (pacman.pos.x >= self.pos.x) and (pacman.pos.y >= self.pos.y):
+
+                    if x_difference >= y_difference:
+                        self.current_direction = "right"
+                    else:
+                        self.current_direction = "down"
+                
+                    
+    def update(self, pacman):
         # Process input at controlled rate
-        self.process_input()
+        self.process_input(pacman)
         
         # Apply velocity based on current direction
         self.vel = Vector(0, 0)  # Reset velocity
@@ -50,7 +84,7 @@ class ghosts:
             self.vel = Vector(-self.speed, 0)
         elif self.current_direction == "up":
             self.vel = Vector(0, -self.speed)
-        elif self.current_direction == "down":
+        elif self.current_direction == "down":  
             self.vel = Vector(0, self.speed)
 
         # Update position
