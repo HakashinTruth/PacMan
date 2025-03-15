@@ -57,7 +57,8 @@ class Interaction:
                         self.pacman.pos.y = wall.y1 + self.pacman.radius
                 
                 break  # Stop checking after first collision
-
+        
+        for wall in self.walls:
             if wall.hit(self.ghost):
                 # Stop Pac-Man when hitting a wall
                 self.ghost.stop()
@@ -75,6 +76,7 @@ class Interaction:
                         self.ghost.pos.y = wall.y1 - self.ghost.radius
                     else:
                         self.ghost.pos.y = wall.y1 + self.ghost.radius
+                break
 
                 
 class Clock:
@@ -153,10 +155,13 @@ def draw(canvas):
     if clock.transition(FRAME_DURATION):
         pacman.next_frame()
     # Handle movement and direction here
-    pacman.update()
+    
     ghost.update(pacman)
-    pacman.draw(canvas)
     ghost.draw(canvas)
+    pacman.update()
+    pacman.draw(canvas)
+
+    #print(ghost.current_direction, " ", ghost.vel)
 
 # Create frame and start the game
 frame = simplegui.create_frame('PacMan', CANVAS_WIDTH, CANVAS_HEIGHT)

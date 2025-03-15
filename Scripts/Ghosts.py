@@ -37,38 +37,39 @@ class Ghost:
             # Reset counter
             self.input_frame_counter = 0
 
-            if pacman.vel == Vector(0,0):
+            #if pacman.vel == Vector(0,0):
+            print(pacman.vel, " ", pacman.pos)
 
-                x_difference = abs(pacman.pos.x - self.pos.x)
-                y_difference = abs(pacman.pos.y - self.pos.y)
+            x_difference = abs(pacman.pos.x - self.pos.x)
+            y_difference = abs(pacman.pos.y - self.pos.y)
 
-                if (pacman.pos.x <= self.pos.x) and (pacman.pos.y <= self.pos.y):
+            if (pacman.pos.x <= self.pos.x) and (pacman.pos.y <= self.pos.y):
 
-                    if x_difference >= y_difference:
-                        self.current_direction = "left"
-                    else:
-                        self.current_direction = "up"
+                if x_difference >= y_difference:
+                    self.current_direction = "left"
+                else:
+                    self.current_direction = "up"
 
-                if (pacman.pos.x >= self.pos.x) and (pacman.pos.y <= self.pos.y):
+            if (pacman.pos.x >= self.pos.x) and (pacman.pos.y <= self.pos.y):
 
-                    if x_difference >= y_difference:
-                        self.current_direction = "right"
-                    else:
-                        self.current_direction = "up"
+                if x_difference >= y_difference:
+                    self.current_direction = "right"
+                else:
+                    self.current_direction = "up"
 
-                if (pacman.pos.x <= self.pos.x) and (pacman.pos.y >= self.pos.y):
+            if (pacman.pos.x <= self.pos.x) and (pacman.pos.y >= self.pos.y):
 
-                    if x_difference >= y_difference:
-                        self.current_direction = "left"
-                    else:
-                        self.current_direction = "down"
-                
-                if (pacman.pos.x >= self.pos.x) and (pacman.pos.y >= self.pos.y):
+                if x_difference >= y_difference:
+                    self.current_direction = "left"
+                else:
+                    self.current_direction = "down"
+            
+            if (pacman.pos.x >= self.pos.x) and (pacman.pos.y >= self.pos.y):
 
-                    if x_difference >= y_difference:
-                        self.current_direction = "right"
-                    else:
-                        self.current_direction = "down"
+                if x_difference >= y_difference:
+                    self.current_direction = "right"
+                else:
+                    self.current_direction = "down"
                 
                     
     def update(self, pacman):
