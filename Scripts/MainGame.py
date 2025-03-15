@@ -41,6 +41,7 @@ class Interaction:
                 self.pacman.stop()
                 self.last_collision = wall
                 
+                
                 # Broad collision handling
                 if wall.x1 == wall.x2:  # Vertical wall
                     if self.pacman.pos.x < wall.x1:
@@ -54,7 +55,7 @@ class Interaction:
                         self.pacman.pos.y = wall.y1 + self.pacman.radius
                 
                 break  # Stop checking after first collision
-
+                
 class Clock:
     def __init__(self, time=0):
         self.time = time
