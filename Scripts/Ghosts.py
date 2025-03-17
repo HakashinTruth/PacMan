@@ -9,9 +9,9 @@ class Ghost:
         self.width = width
         self.height = height
         self.pos = pos
-        self.vel = Vector(0, 0)  # Start with zero velocity
+        self.vel = Vector(0, -1)  # Start with -1 velocity
         self.step = 0
-        self.current_direction = None  # No initial direction
+        self.current_direction = "up"  # No initial direction
         self.spriteimgs = Spritesheet(spriteimgs, rows, columns)
         self.speed = 2  # Keep the 2x speed from previous update
         self.radius = 16  # Increased from 16 to 20

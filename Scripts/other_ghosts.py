@@ -2,6 +2,7 @@ import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 from sprite_animations import Spritesheet
 from utils import Vector
 from Ghosts import Ghost
+from walls import Wall  
 import math
 import random
 
@@ -19,12 +20,12 @@ class OtherGhost(Ghost):
         if self.input_frame_counter >= self.input_interval:
             # Reset counter
             self.input_frame_counter = 0
-
-            if self.vel == Vector(0,0):
+            '''
+            if self.hit():
               print(self.vel, " ", self.pos)
 
               self.current_direction = self.directions[random.randint(0,3)]
-    
+            '''
 
 
 
