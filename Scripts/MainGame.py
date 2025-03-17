@@ -1,9 +1,14 @@
 import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 import math
+import random
 from MyPac import PacMan
 from utils import Vector
 from walls import Wall
 from map_generator import MapGenerator
+from Ghosts import Ghost
+from green_ghost import GreenGhost
+from other_ghosts import OtherGhost
+
 class Keyboard:
     def __init__(self):
         self.right = False
@@ -24,8 +29,9 @@ class Keyboard:
             self.down = True
 
 class Interaction:
-    def __init__(self, pacman, keyboard, walls, squares):
+    def __init__(self, pacman, ghosts, keyboard, walls, squares):
         self.pacman = pacman
+        self.ghosts = ghosts
         self.keyboard = keyboard
         self.walls = walls
         self.last_collision = None  # Track the last wall collided with
@@ -41,6 +47,7 @@ class Interaction:
                 self.pacman.stop()
                 self.last_collision = wall
                 
+                
                 # Broad collision handling
                 if wall.x1 == wall.x2:  # Vertical wall
                     if self.pacman.pos.x < wall.x1:
@@ -54,7 +61,39 @@ class Interaction:
                         self.pacman.pos.y = wall.y1 + self.pacman.radius
                 
                 break  # Stop checking after first collision
+        
+        for wall in self.walls:
+            for ghost in self.ghosts:
+                if wall.hit(ghost):
+                    # Stop Pac-Man when hitting a wall
+                    ghost.stop()
+                    self.last_collision = wall
 
+                    if type(ghost) == OtherGhost:
+                        directions = ["left", "right", "up", "down"]
+                        
+                        newDirection = ghost.current_direction
+                        while newDirection == ghost.current_direction:
+                            newDirection = directions[random.randint(0,3)]
+                        ghost.current_direction = newDirection
+                    
+                    
+                    # Broad collision handling
+                    if wall.x1 == wall.x2:  # Vertical wall
+                        if ghost.pos.x < wall.x1:
+                            ghost.pos.x = wall.x1 - ghost.radius
+                        else:
+                            ghost.pos.x = wall.x1 + ghost.radius
+                    else:  # Horizontal wall
+                        if ghost.pos.y < wall.y1:
+                            ghost.pos.y = wall.y1 - ghost.radius
+                        else:
+                            ghost.pos.y = wall.y1 + ghost.radius
+
+                            
+                    break
+
+                
 class Clock:
     def __init__(self, time=0):
         self.time = time
@@ -101,7 +140,13 @@ arr=[
 # Keyboard and game setup
 kbd = Keyboard()
 clock = Clock()
-pacman = PacMan(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0, 0), kbd, "https://i.postimg.cc/Z0k4dWCw/PacMan.png", 1, 8,CANVAS_WIDTH,CANVAS_HEIGHT)
+greenGhost = GreenGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,-1), "/Users/dreniskastrati/Downloads/PacManProject/PacMan/pacmanPack/greenGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
+blueGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,-1), "/Users/dreniskastrati/Downloads/PacManProject/PacMan/pacmanPack/blueGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
+redGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,-1), "/Users/dreniskastrati/Downloads/PacManProject/PacMan/pacmanPack/redGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
+orangeGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,-1), "/Users/dreniskastrati/Downloads/PacManProject/PacMan/pacmanPack/orangeGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
+
+Ghosts = [greenGhost, blueGhost, redGhost, orangeGhost]
+pacman = PacMan(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/5), Vector(0, 0), kbd, "/Users/dreniskastrati/Downloads/PacManProject/PacMan/pacmanPack/PacMan.png", 1, 8,CANVAS_WIDTH,CANVAS_HEIGHT)
 Mg = MapGenerator(arr, CANVAS_WIDTH, CANVAS_HEIGHT)
 # Wall creation
 '''
@@ -117,7 +162,7 @@ walls = [
     Wall(0, 2*CANVAS_HEIGHT/3, CANVAS_WIDTH/5, 2*CANVAS_HEIGHT/3),  # Top middle section left
     Wall(4*CANVAS_WIDTH/5, 2*CANVAS_HEIGHT/3, CANVAS_WIDTH, 2*CANVAS_HEIGHT/3)  # Top middle section right
 ]'''
-interaction = Interaction(pacman, kbd, Mg.walls,Mg.square)
+interaction = Interaction(pacman, Ghosts, kbd, Mg.walls,Mg.square)
 
 def draw(canvas):
     interaction.update()
@@ -130,8 +175,18 @@ def draw(canvas):
     if clock.transition(FRAME_DURATION):
         pacman.next_frame()
     # Handle movement and direction here
+    
+    for ghost in Ghosts:
+        if type(ghost) == GreenGhost:
+            ghost.update(pacman)
+        else:
+            ghost.update()
+        ghost.draw(canvas)
+
     pacman.update()
     pacman.draw(canvas)
+
+    #print(ghost.current_direction, " ", ghost.vel)
 
 # Create frame and start the game
 frame = simplegui.create_frame('PacMan', CANVAS_WIDTH, CANVAS_HEIGHT)

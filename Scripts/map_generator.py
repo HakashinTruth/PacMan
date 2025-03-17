@@ -73,7 +73,7 @@ class MapGenerator:
                     self.walls.append(Wall(x1 + cell_width, y1, x1 + cell_width, y2,cell_height,cell_width,border,wallcolor))  # Right wall
                     wall_start = None
         
-        #display map ui ontop of existing lines to give ilusion of a thick wall      
+        #display map ui ontop of existing lines to give illusion of a thick wall      
         for row in range(rows):
             for col in range(cols):
                 xpos = col * cell_width - innerBorder

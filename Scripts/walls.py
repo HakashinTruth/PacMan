@@ -52,32 +52,55 @@ class Wall:
         # Use Pac-Man's radius for collision detection
         # Check if wall is in the way of pacman's direction
         # Check if pacman within the wall's range
+        '''
+        if (self.y1 == self.y2) and pacman.current_direction == "right":
+            depth = abs(pacman.pos.x - self.x1)
+            pacman.stop()
+            return (pacman.pos.x + pacman.radius) > (self.x1 - self.border) and (depth >= 0 and depth <= pacman.radius)
+        if (self.y1 == self.y2) and pacman.current_direction == "left":
+            depth = abs(self.x1 - pacman.pos.x)
+            pacman.stop()
+            return (pacman.pos.x - pacman.radius) < (self.x1 + self.border) and (depth >= 0 and depth <= pacman.radius)
+        if (self.x1 == self.x2) and pacman.current_direction == "down":
+            depth = abs(pacman.pos.y - self.y1)
+            pacman.stop()
+            return (pacman.pos.y + pacman.radius) > (self.y1 - self.border) and (depth >= 0 and depth <= pacman.radius)
+        if (self.x1 == self.x2) and pacman.current_direction == "up":
+            depth = abs(self.y1 - pacman.pos.y)
+            pacman.stop()
+            return (pacman.pos.y - pacman.radius) < (self.y1 + self.border) and (depth >= 0 and depth <= pacman.radius)
+        
+        '''
+        # Use Pac-Man's radius for collision detection
+        # Check if wall is in the way of pacman's direction
+        # Check if pacman within the wall's range
         pac_direction = pacman.current_direction
         pac_radius = pacman.radius
         if pac_direction == "right":
-            x_collision = (abs(pacman.pos.x - self.x1) <= pac_radius)
-            y_inside = (min(self.y1, self.y2) <= pacman.pos.y <= max(self.y1, self.y2))
+            x_collision = (self.x1 - pacman.radius <= pacman.pos.x <= self.x1)
+
+            y_inside = (min(self.y1, self.y2) - pacman.radius/2 <= pacman.pos.y <= max(self.y1, self.y2) + pacman.radius/2)
             pacman.stop()
             return y_inside > 0 and x_collision > 0
         elif pac_direction == "left":
             x_collision = (abs(pacman.pos.x - self.x2) <= pac_radius)
-            y_inside = (min(self.y1, self.y2) <= pacman.pos.y <= max(self.y1, self.y2))
+            y_inside = (min(self.y1, self.y2) - pacman.radius/2 <= pacman.pos.y <= max(self.y1, self.y2) + pacman.radius/2)
             pacman.stop()
             return y_inside > 0 and x_collision > 0
         elif pac_direction == "up":
-            x_inside = (min(self.x1, self.x2) <= pacman.pos.x <= max(self.x1, self.x2))
+            x_inside = (min(self.x1, self.x2) - pacman.radius/2 <= pacman.pos.x <= max(self.x1, self.x2) + pacman.radius/2)
             y_collision = (abs(pacman.pos.y - self.y2) <= pac_radius)
             pacman.stop()
             return y_collision > 0 and x_inside > 0
         elif pac_direction == "down":
-            x_inside = (min(self.x1, self.x2) <= pacman.pos.x <= max(self.x1, self.x2))
+            x_inside = (min(self.x1, self.x2) - pacman.radius/2 <= pacman.pos.x <= max(self.x1, self.x2) + pacman.radius/2)
             y_collision = (abs(pacman.pos.y - self.y1) <= pac_radius)
             pacman.stop()
             return y_collision > 0 and x_inside > 0
         elif pacman.radius > self.y1 + self.border and pacman.radius < self.y2 + self.border and pacman.radius  > self.x1 + self.border and pacman.radius  < self.x2 + self.border:
             pacman.stop()
             return True
-
+        
         
     
     
