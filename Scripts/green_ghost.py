@@ -19,7 +19,7 @@ class GreenGhost(Ghost):
             self.input_frame_counter = 0
 
             #if pacman.vel == Vector(0,0):
-            print(pacman.vel, " ", pacman.pos)
+            #print(pacman.vel, " ", pacman.pos)
 
             x_difference = abs(pacman.pos.x - self.pos.x)
             y_difference = abs(pacman.pos.y - self.pos.y)

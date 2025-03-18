@@ -1,5 +1,6 @@
 import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 from walls import Wall
+from Points import Point
 import math
 
 class MapGenerator:
@@ -9,7 +10,7 @@ class MapGenerator:
         self.canvas_height = canvas_height
         self.walls = []
         self.square=[]
-        self.blackWall=[]
+        self.points=[]
         self.generate_walls()
 
     def generate_walls(self):
@@ -87,7 +88,15 @@ class MapGenerator:
                         self.square.append(Wall(xpos-(2*innerBorder), ypos+(2*innerBorder), (xpos) + cell_width, ypos + cell_height, cell_height, cell_width,innerBorder,innerWallcolor))
                     if row >0 and self.map[row-1][col]==1:
                         self.square.append(Wall(xpos+(2*innerBorder), ypos-(2*innerBorder), xpos + cell_width, (ypos-(2*innerBorder)) + cell_height, cell_height, cell_width,innerBorder,innerWallcolor))
-         
+       
+        for row in range(rows):
+            for col in range(cols):
+                xpos=col*cell_width +cell_width/2
+                ypos = row*cell_height +cell_height/2
+                if self.map[row][col]==2:
+                    self.points.append(Point((xpos,ypos),1,8,self.canvas_width,self.canvas_height))
+                    
+                 
                 
           
  #not being used

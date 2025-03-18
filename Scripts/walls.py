@@ -14,8 +14,9 @@ class Wall:
         self.cellWidth=cell_width
 
     def draw(self, canvas):
+        #canvas.draw_line((self.x1, self.y1), (self.x2, self.y2), self.border * 2 + 1, "white")
         canvas.draw_polygon([(self.x1,self.y1),(self.x2,self.y1),(self.x2,self.y2),(self.x1,self.y2)],self.border,self.color,self.color)
-        #canvas.draw_line((self.x1, self.y1), (self.x2, self.y2), self.border * 2 + 1, self.color)
+        
     '''
     def hit(self, pacman):
         # Use Pac-Man's radius for collision detection

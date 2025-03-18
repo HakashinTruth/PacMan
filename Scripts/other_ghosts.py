@@ -26,6 +26,7 @@ class OtherGhost(Ghost):
 
               self.current_direction = self.directions[random.randint(0,3)]
             '''
+    
 
 
 

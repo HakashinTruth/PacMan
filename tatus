@@ -1,0 +1,135 @@
+[33mcommit 6e5a5442fd4527c4d1f2b6edba02b8b2276fbac2[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mGhosts[m[33m)[m
+Merge: 8eb040e c9e830a
+Author: HakashinTruth <regiongamer11@gmail.com>
+Date:   Mon Mar 17 13:23:01 2025 +0000
+
+    testing1
+
+[33mcommit 8eb040e34bb6268da2bb7fd347ef5b61d2bb99ba[m
+Author: HakashinTruth <regiongamer11@gmail.com>
+Date:   Mon Mar 17 13:15:17 2025 +0000
+
+    test
+
+[33mcommit c9e830abcdcc6c7ef938548d0355c3f91fb6f8a7[m[33m ([m[1;31morigin/GhostsDKTesting[m[33m)[m
+Author: dreniskastrati <drenisi.04@gmail.com>
+Date:   Mon Mar 17 12:55:01 2025 +0000
+
+    to be pushed
+
+[33mcommit 063efc2eb59df393f894c74de3dc537a6d296718[m
+Author: dreniskastrati <drenisi.04@gmail.com>
+Date:   Mon Mar 17 10:00:44 2025 +0000
+
+    Committing to save changes
+
+[33mcommit fa6589dc1d7c33f096606b8e441150f00b5090c3[m
+Author: dreniskastrati <drenisi.04@gmail.com>
+Date:   Mon Mar 17 09:55:42 2025 +0000
+
+    committing to save work
+
+[33mcommit 9a179e43b107f6d907a7cdebc45e79aa96624f8b[m
+Author: dreniskastrati <drenisi.04@gmail.com>
+Date:   Sat Mar 15 14:21:07 2025 +0000
+
+    Version 3 - Added other ghosts with random movements, they should randomly move when their velocity is 0, however their velocity randomly changes all the time
+
+[33mcommit 5e28bbdfd702793c13849bda1fb0b91572c26457[m
+Author: dreniskastrati <drenisi.04@gmail.com>
+Date:   Sat Mar 15 12:39:14 2025 +0000
+
+    Version 3 - Ghost tracks pacman based on real time coordinates, need to fix so it doesnt get stuck by following through a wall
+
+[33mcommit 04c3d113dcea0e772ad6a9374a0d8226e2f12a90[m
+Author: dreniskastrati <drenisi.04@gmail.com>
+Date:   Sat Mar 15 12:07:19 2025 +0000
+
+    Version 3 - Added one ghost to canvas, trying to sort out the algorithm for it to move to the pacman, many bugs
+
+[33mcommit 73370398a54dc8b848f9d237045996c8e38fe55a[m
+Author: dreniskastrati <drenisi.04@gmail.com>
+Date:   Sat Mar 15 10:53:45 2025 +0000
+
+    Working on V3 - Added Ghost class with similar methods to PacMan
+
+[33mcommit e9195ce9e3c8ac4305603863e565b5795cf7d909[m
+Author: dreniskastrati <drenisi.04@gmail.com>
+Date:   Sat Mar 15 00:11:44 2025 +0000
+
+    Version 2 - Stopped PacMan from riding wall and glitching inside
+
+[33mcommit 8f0e5f8e0179a9e0c78a92e721572036a3629e04[m
+Author: dreniskastrati <drenisi.04@gmail.com>
+Date:   Fri Mar 14 22:52:30 2025 +0000
+
+    Version 1 still fixing
+
+[33mcommit 4c530d9033c7adb8b95ecde8a32403d7e0d26221[m
+Author: dreniskastrati <drenisi.04@gmail.com>
+Date:   Fri Mar 14 22:51:16 2025 +0000
+
+    Adding radius to detect collision
+
+[33mcommit ebb5669d4b2e9c32db53e660329c85e4acf8ab33[m
+Author: dreniskastrati <drenisi.04@gmail.com>
+Date:   Fri Mar 14 18:49:42 2025 +0000
+
+    Version 1
+
+[33mcommit e604bd0421e9a4d4bc773e249bccc353b688dd79[m[33m ([m[1;31morigin/Ghosts[m[33m)[m
+Author: HakashinTruth <regiongamer11@gmail.com>
+Date:   Fri Mar 14 11:46:52 2025 +0000
+
+    Added square tiles to display the walls and layered it ontop of the existing collision lines , also fixed pacman jittering when coliding right/left or up/down between walls ,this was due to map size being to small
+
+[33mcommit 1c7597458a17bfeb4a3e11897dace78f0d043385[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Merge: c610624 a13c271
+Author: Aerovity <zizoubrahmi7@gmail.com>
+Date:   Thu Mar 6 23:06:40 2025 +0100
+
+    Merge pull request #1 from HakashinTruth/Pacman_movements_and_anim
+    
+    Pacman movements and anim and walls
+
+[33mcommit a13c271dcbf0ff07563991e8c1e57e2fff143d0b[m[33m ([m[1;31morigin/Pacman_movements_and_anim[m[33m)[m
+Author: Aerovity <zizoubrahmi7@gmail.com>
+Date:   Thu Mar 6 23:05:10 2025 +0100
+
+    Fix corner bugs
+
+[33mcommit fba838562cde9641f2dc67af72c83bdb80d3177f[m
+Author: Aerovity <zizoubrahmi7@gmail.com>
+Date:   Tue Mar 4 18:26:06 2025 +0100
+
+    walls builder
+
+[33mcommit 0b5019587bc12b56ee663e1036218a0c08b6f553[m
+Author: Aerovity <zizoubrahmi7@gmail.com>
+Date:   Tue Mar 4 15:32:51 2025 +0100
+
+    Collisions and walls
+
+[33mcommit 29328f6c0511d0dee564a3c19e6d39de48fb3a98[m
+Author: Aerovity <zizoubrahmi7@gmail.com>
+Date:   Mon Mar 3 15:40:34 2025 +0100
+
+    Pacman Animations and movements
+
+[33mcommit da997fc608d4dc6031910095cebc45c81491b670[m
+Author: Aerovity <zizoubrahmi7@gmail.com>
+Date:   Mon Mar 3 12:08:36 2025 +0100
+
+    yes
+
+[33mcommit c610624d0c41d1eeeff1357a50bce4d24857989d[m
+Author: Hakashin <regiongamer11@gmail.com>
+Date:   Thu Jan 23 13:13:25 2025 +0000
+
+    Initial Commit and tree Structure
+
+[33mcommit ae451b259bc1520ad32a5a2153e600273d62433d[m
+Author: Hakashin <115143196+HakashinTruth@users.noreply.github.com>
+Date:   Thu Jan 23 12:21:16 2025 +0000
+
+    Initial commit
