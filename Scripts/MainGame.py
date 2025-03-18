@@ -162,10 +162,10 @@ arr=[
 # Keyboard and game setup
 kbd = Keyboard()
 clock = Clock()
-greenGhost = GreenGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,0), "pacmanPack/greenGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
-blueGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,0), "pacmanPack/blueGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
-redGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,0), "pacmanPack/redGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
-orangeGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,0), "pacmanPack/orangeGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
+greenGhost = GreenGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,0), r"C:\Users\Student\OneDrive\Desktop\project\PacMan\pacmanPack\greenGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
+blueGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,0), r"C:\Users\Student\OneDrive\Desktop\project\PacMan\pacmanPack\blueGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
+redGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,0), r"C:\Users\Student\OneDrive\Desktop\project\PacMan\pacmanPack\redGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
+orangeGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,0), r"C:\Users\Student\OneDrive\Desktop\project\PacMan\pacmanPack\orangeGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
 
 
 Ghosts = [blueGhost, greenGhost, redGhost, orangeGhost]
