@@ -4,7 +4,7 @@ from utils import Vector
 import math
 
 class PacMan:
-    def __init__(self, pos, vel, keys, spriteimgs, rows, columns,width,height):
+    def __init__(self, pos, vel, keys, spriteimgs, rows, columns, width, height):
         print("PacMan initialized!")
         self.width=width
         self.height=height
@@ -89,6 +89,14 @@ class PacMan:
         elif self.pos.y < 0:  # Top edge
             self.pos.y = self.height
 
+    def collidedWithPoint(self, entity):
+        xPac = self.pos.x
+        xEntity = entity.pos.x
+
+        yPac = self.pos.y
+        yEntity = entity.pos.y
+        return xPac < (xEntity + entity.radius*2) and (xPac + self.radius) > xEntity and yPac < (yEntity + entity.radius*2) and (yPac + self.radius) > yEntity
+
     def next_frame(self):
         self.spriteimgs.next_frame()
     
@@ -100,3 +108,6 @@ class PacMan:
     
     def offset_r(self):
         return self.pos.x + self.radius  # Use radius for offset
+    
+    def reset_position(self):
+        self.pos = Vector(self.width/2, self.height/5)

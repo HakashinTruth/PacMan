@@ -10,6 +10,8 @@ from Points import Point
 from green_ghost import GreenGhost
 from other_ghosts import OtherGhost
 
+
+
 class Keyboard:
     def __init__(self):
         self.right = False
@@ -30,12 +32,16 @@ class Keyboard:
             self.down = True
 
 class Interaction:
+    
     def __init__(self, pacman, ghosts, keyboard, walls, squares, points):
         self.pacman = pacman
         self.ghosts = ghosts
         self.keyboard = keyboard
         self.walls = walls
+        self.points = points
         self.last_collision = None  # Track the last wall collided with
+        self.lives = 3
+        self.score = 0
 
     def update(self):
         # Reset last collision
@@ -95,6 +101,20 @@ class Interaction:
                             
                     break
 
+                for point in self.points:
+                    if pacman.collidedWithPoint(point):
+                        self.points.remove(point)
+                        self.score += 10
+                
+                for ghost in self.ghosts:
+                    if pacman.collidedWithPoint(ghost):
+                        self.lives -= 1
+                        self.pacman.reset_position()
+                        #ghost.reset_position()
+
+
+                        
+
                 
 class Clock:
     def __init__(self, time=0):
@@ -142,13 +162,14 @@ arr=[
 # Keyboard and game setup
 kbd = Keyboard()
 clock = Clock()
-greenGhost = GreenGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,-1), r"C:\Users\Student\OneDrive\Desktop\project\PacMan\pacmanPack\orangeGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
-blueGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,-1), r"C:\Users\Student\OneDrive\Desktop\project\PacMan\pacmanPack\redGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
-redGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,-1), r"C:\Users\Student\OneDrive\Desktop\project\PacMan\pacmanPack\yellowGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
-orangeGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,-1), r"C:\Users\Student\OneDrive\Desktop\project\PacMan\pacmanPack\greenGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
+greenGhost = GreenGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,0), "pacmanPack/greenGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
+blueGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,0), "pacmanPack/blueGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
+redGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,0), "pacmanPack/redGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
+orangeGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,0), "pacmanPack/orangeGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
 
-Ghosts = [greenGhost, blueGhost, redGhost, orangeGhost]
-pacman = PacMan(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/5), Vector(0, 0), kbd, r"C:\Users\Student\OneDrive\Desktop\project\PacMan\pacmanPackPacMan.png", 1, 8,CANVAS_WIDTH,CANVAS_HEIGHT)
+
+Ghosts = [blueGhost, greenGhost, redGhost, orangeGhost]
+pacman = PacMan(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/5), Vector(0, 0), kbd, r"C:\Users\Student\OneDrive\Desktop\project\PacMan\pacmanPack\PacMan.png", 1, 8,CANVAS_WIDTH,CANVAS_HEIGHT)
 Mg = MapGenerator(arr, CANVAS_WIDTH, CANVAS_HEIGHT)
 # Wall creation
 '''
@@ -175,6 +196,8 @@ def draw(canvas):
     for p in Mg.points:
         p.draw(canvas)
 
+    canvas.draw_text("Lives remaining: " + str(interaction.lives), (10,18), 18, "White")
+    canvas.draw_text("Score: " + str(interaction.score), (CANVAS_WIDTH -100,18), 18, "White")
     clock.tick()
     if clock.transition(FRAME_DURATION):
         pacman.next_frame()

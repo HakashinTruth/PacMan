@@ -9,8 +9,8 @@ class Point:
         self.height = height
         self.pos = pos
         self.vel = Vector(0, 0)
-        self.spriteimgs = Spritesheet(r"C:\Users\Student\OneDrive\Desktop\project\PacMan\pacmanPack\CoinTransparent", rows, columns)
-        self.radius = 3 
+        self.spriteimgs = Spritesheet(r"C:\Users\Student\OneDrive\Desktop\project\PacMan\pacmanPack\CoinTransparent.png", rows, columns)
+        self.radius = 5
  
         # Input rate control variables
         self.input_frame_counter = 0
