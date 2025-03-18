@@ -148,7 +148,7 @@ redGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,-1), r"C
 orangeGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,-1), r"C:\Users\Student\OneDrive\Desktop\project\PacMan\pacmanPack\greenGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
 
 Ghosts = [greenGhost, blueGhost, redGhost, orangeGhost]
-pacman = PacMan(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/5), Vector(0, 0), kbd, r"C:\Users\Student\OneDrive\Desktop\project\PacMan\pacmanPack\PacMan.png", 1, 8,CANVAS_WIDTH,CANVAS_HEIGHT)
+pacman = PacMan(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/5), Vector(0, 0), kbd, r"C:\Users\Student\OneDrive\Desktop\project\PacMan\pacmanPackPacMan.png", 1, 8,CANVAS_WIDTH,CANVAS_HEIGHT)
 Mg = MapGenerator(arr, CANVAS_WIDTH, CANVAS_HEIGHT)
 # Wall creation
 '''
