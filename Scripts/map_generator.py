@@ -1,6 +1,7 @@
 import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 from walls import Wall
 from Points import Point
+from utils import Vector
 import math
 
 class MapGenerator:
@@ -94,7 +95,7 @@ class MapGenerator:
                 xpos=col*cell_width +cell_width/2
                 ypos = row*cell_height +cell_height/2
                 if self.map[row][col]==2:
-                    self.points.append(Point((xpos,ypos),1,8,self.canvas_width,self.canvas_height))
+                    self.points.append(Point(Vector(xpos,ypos),1,8,self.canvas_width,self.canvas_height))
                     
                  
                 

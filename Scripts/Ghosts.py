@@ -71,4 +71,7 @@ class Ghost:
     
     def offset_r(self):
         return self.pos.x + self.radius  # Use radius for offset
+    
+    def reset_position(self):
+        self.pos = Vector(self.width/2, self.height/2)
             
