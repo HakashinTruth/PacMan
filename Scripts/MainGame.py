@@ -40,7 +40,7 @@ class Interaction:
         self.walls = walls
         self.points = points
         self.last_collision = None  # Track the last wall collided with
-        self.lives = 3
+        self.lives = 1
         self.score = 0
 
     def update(self):
@@ -72,17 +72,16 @@ class Interaction:
         for wall in self.walls:
             for ghost in self.ghosts:
                 if wall.hit(ghost):
+                    
                     # Stop Pac-Man when hitting a wall
                     ghost.stop()
                     self.last_collision = wall
 
                     if type(ghost) == OtherGhost:
                         directions = ["left", "right", "up", "down"]
-                        
                         newDirection = ghost.current_direction
                         while newDirection == ghost.current_direction:
                             newDirection = directions[random.randint(0,3)]
-                            print(newDirection)
                         ghost.current_direction = newDirection
                     
                     
@@ -144,10 +143,10 @@ arr=[
     [1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1],
     [1, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1],
     [0, 0, 0, 0, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 0, 0, 0, 0],
-    [1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 2, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1],
     [2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2],
     [1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 2, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1],
-    [0, 0, 0, 0, 1, 2, 1, 2, 1, 1, 2, 1, 1, 2, 1, 2, 1, 0, 0, 0, 0],
+    [0, 0, 0, 0, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 2, 1, 0, 0, 0, 0],
     [0, 0, 0, 0, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 0, 0, 0, 0],
     [1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1, 1],
     [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
@@ -163,12 +162,12 @@ arr=[
 kbd = Keyboard()
 clock = Clock()
 greenGhost = GreenGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,0), r"C:\Users\Student\OneDrive\Desktop\project\PacMan\pacmanPack\greenGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
-blueGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,0), r"C:\Users\Student\OneDrive\Desktop\project\PacMan\pacmanPack\blueGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
+blueGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,0), r"C:\Users\Student\OneDrive\Desktop\project\PacMan\pacmanPack\redGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
 redGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,0), r"C:\Users\Student\OneDrive\Desktop\project\PacMan\pacmanPack\redGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
 orangeGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,0), r"C:\Users\Student\OneDrive\Desktop\project\PacMan\pacmanPack\orangeGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
 
 
-Ghosts = [blueGhost, greenGhost, redGhost, orangeGhost]
+Ghosts = [blueGhost,redGhost, orangeGhost,greenGhost]
 pacman = PacMan(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/5), Vector(0, 0), kbd, r"C:\Users\Student\OneDrive\Desktop\project\PacMan\pacmanPack\PacMan.png", 1, 8,CANVAS_WIDTH,CANVAS_HEIGHT)
 Mg = MapGenerator(arr, CANVAS_WIDTH, CANVAS_HEIGHT)
 # Wall creation

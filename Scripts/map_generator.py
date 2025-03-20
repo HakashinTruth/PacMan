@@ -83,8 +83,6 @@ class MapGenerator:
                 if self.map[row][col] == 1:
                     self.square.append(Wall(xpos+innerBorder, ypos+innerBorder, xpos+innerBorder + cell_width, ypos+innerBorder + cell_height, cell_height, cell_width,innerBorder,wallcolor))
                     self.square.append(Wall(xpos+(2*innerBorder), ypos+(2*innerBorder), xpos + cell_width, ypos + cell_height, cell_height, cell_width,innerBorder,innerWallcolor))
-                    if col<cols-1 and self.map[row][col+1]==1:
-                        self.square.append(Wall(xpos+(2*innerBorder), ypos+(2*innerBorder), (xpos+(innerBorder*2)) + cell_width, ypos + cell_height, cell_height, cell_width,innerBorder,innerWallcolor))
                     if col >0 and self.map[row][col-1]==1:
                         self.square.append(Wall(xpos-(2*innerBorder), ypos+(2*innerBorder), (xpos) + cell_width, ypos + cell_height, cell_height, cell_width,innerBorder,innerWallcolor))
                     if row >0 and self.map[row-1][col]==1:
