@@ -5,7 +5,6 @@ import math
 
 class Ghost:
     def __init__(self, pos, vel, spriteimgs, rows, columns, width, height):
-        print("Ghost initialized!")
         self.width = width
         self.height = height
         self.pos = pos
@@ -13,7 +12,7 @@ class Ghost:
         self.step = 0
         self.current_direction = "up"  # No initial direction
         self.spriteimgs = Spritesheet(spriteimgs, rows, columns)
-        self.speed = 2  # Keep the 2x speed from previous update
+        self.speed = 1  # Keep the 2x speed from previous update
         self.radius = 16  # Increased from 16 to 20
 
         # Input rate control variables
@@ -34,7 +33,7 @@ class Ghost:
         
         # Apply velocity based on current direction
         self.vel = Vector(0, 0)  # Reset velocity
-    
+
         if self.current_direction == "right":
             self.vel = Vector(self.speed, 0)
         elif self.current_direction == "left":
@@ -46,19 +45,23 @@ class Ghost:
 
         # Update position
         self.pos.add(self.vel)
-    
-        # Simplified wrap-around logic
-        # Horizontal wrap
-        if self.pos.x > self.width:  # Right edge
-            self.pos.x = 0
-        elif self.pos.x < 0:  # Left edge
-            self.pos.x = self.width
-    
-        # Vertical wrap
-        if self.pos.y > self.height:  # Bottom edge
-            self.pos.y = 0
-        elif self.pos.y < 0:  # Top edge
-            self.pos.y = self.height
+        
+        # Constrain ghost within screen boundaries (assuming self.width and self.height are screen dimensions)
+        # Horizontal boundaries
+        if self.pos.x > self.width - self.radius:
+            self.pos.x = self.width - self.radius
+            self.current_direction = "left"  # Reverse direction
+        elif self.pos.x < self.radius:
+            self.pos.x = self.radius
+            self.current_direction = "right"
+        
+        # Vertical boundaries
+        if self.pos.y > self.height - self.radius:
+            self.pos.y = self.height - self.radius
+            self.current_direction = "up"  # Reverse direction
+        elif self.pos.y < self.radius:
+            self.pos.y = self.radius
+            self.current_direction = "down"
 
     def next_frame(self):
         self.spriteimgs.next_frame()
@@ -74,4 +77,3 @@ class Ghost:
     
     def reset_position(self):
         self.pos = Vector(self.width/2, self.height/2)
-            

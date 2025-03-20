@@ -49,59 +49,54 @@ class Wall:
             pacman.stop()
             return y_inside and x_collision
     '''
-    def hit(self, pacman):
-        # Use Pac-Man's radius for collision detection
-        # Check if wall is in the way of pacman's direction
-        # Check if pacman within the wall's range
-        '''
-        if (self.y1 == self.y2) and pacman.current_direction == "right":
-            depth = abs(pacman.pos.x - self.x1)
-            pacman.stop()
-            return (pacman.pos.x + pacman.radius) > (self.x1 - self.border) and (depth >= 0 and depth <= pacman.radius)
-        if (self.y1 == self.y2) and pacman.current_direction == "left":
-            depth = abs(self.x1 - pacman.pos.x)
-            pacman.stop()
-            return (pacman.pos.x - pacman.radius) < (self.x1 + self.border) and (depth >= 0 and depth <= pacman.radius)
-        if (self.x1 == self.x2) and pacman.current_direction == "down":
-            depth = abs(pacman.pos.y - self.y1)
-            pacman.stop()
-            return (pacman.pos.y + pacman.radius) > (self.y1 - self.border) and (depth >= 0 and depth <= pacman.radius)
-        if (self.x1 == self.x2) and pacman.current_direction == "up":
-            depth = abs(self.y1 - pacman.pos.y)
-            pacman.stop()
-            return (pacman.pos.y - pacman.radius) < (self.y1 + self.border) and (depth >= 0 and depth <= pacman.radius)
-        
-        '''
-        # Use Pac-Man's radius for collision detection
-        # Check if wall is in the way of pacman's direction
-        # Check if pacman within the wall's range
-        pac_direction = pacman.current_direction
-        pac_radius = pacman.radius
-        if pac_direction == "right":
-            x_collision = (self.x1 - pacman.radius <= pacman.pos.x <= self.x1)
+    def hit(self, entity, ghost=False):
+        if not ghost:
+            # Preliminary bounding box check for performance (optimized for Pac-Man)
+            min_x = min(self.x1, self.x2)
+            max_x = max(self.x1, self.x2)
+            min_y = min(self.y1, self.y2)
+            max_y = max(self.y1, self.y2)
+            if (entity.pos.x < min_x - 50 or entity.pos.x > max_x + 50 or
+                entity.pos.y < min_y - 50 or entity.pos.y > max_y + 50):
+                return False
 
-            y_inside = (min(self.y1, self.y2) - pacman.radius/2 <= pacman.pos.y <= max(self.y1, self.y2) + pacman.radius/2)
-            pacman.stop()
-            return y_inside > 0 and x_collision > 0
-        elif pac_direction == "left":
-            x_collision = (abs(pacman.pos.x - self.x2) <= pac_radius)
-            y_inside = (min(self.y1, self.y2) - pacman.radius/2 <= pacman.pos.y <= max(self.y1, self.y2) + pacman.radius/2)
-            pacman.stop()
-            return y_inside > 0 and x_collision > 0
-        elif pac_direction == "up":
-            x_inside = (min(self.x1, self.x2) - pacman.radius/2 <= pacman.pos.x <= max(self.x1, self.x2) + pacman.radius/2)
-            y_collision = (abs(pacman.pos.y - self.y2) <= pac_radius)
-            pacman.stop()
-            return y_collision > 0 and x_inside > 0
-        elif pac_direction == "down":
-            x_inside = (min(self.x1, self.x2) - pacman.radius/2 <= pacman.pos.x <= max(self.x1, self.x2) + pacman.radius/2)
-            y_collision = (abs(pacman.pos.y - self.y1) <= pac_radius)
-            pacman.stop()
-            return y_collision > 0 and x_inside > 0
-        elif pacman.radius > self.y1 + self.border and pacman.radius < self.y2 + self.border and pacman.radius  > self.x1 + self.border and pacman.radius  < self.x2 + self.border:
-            pacman.stop()
-            return True
-        
-        
-    
-    
+            # Use Pac-Man's directional collision logic
+            pac_direction = entity.current_direction
+            pac_radius = entity.radius
+            if pac_direction == "right":
+                x_collision = (self.x1 - pac_radius <= entity.pos.x <= self.x1)
+                y_inside = (min(self.y1, self.y2) - pac_radius/2 <= entity.pos.y <= max(self.y1, self.y2) + pac_radius/2)
+                if x_collision and y_inside:
+                    entity.stop()
+                    return True
+            elif pac_direction == "left":
+                x_collision = (abs(entity.pos.x - self.x2) <= pac_radius)
+                y_inside = (min(self.y1, self.y2) - pac_radius/2 <= entity.pos.y <= max(self.y1, self.y2) + pac_radius/2)
+                if x_collision and y_inside:
+                    entity.stop()
+                    return True
+            elif pac_direction == "up":
+                x_inside = (min(self.x1, self.x2) - pac_radius/2 <= entity.pos.x <= max(self.x1, self.x2) + pac_radius/2)
+                y_collision = (abs(entity.pos.y - self.y2) <= pac_radius)
+                if x_inside and y_collision:
+                    entity.stop()
+                    return True
+            elif pac_direction == "down":
+                x_inside = (min(self.x1, self.x2) - pac_radius/2 <= entity.pos.x <= max(self.x1, self.x2) + pac_radius/2)
+                y_collision = (abs(entity.pos.y - self.y1) <= pac_radius)
+                if x_inside and y_collision:
+                    entity.stop()
+                    return True
+            return False
+        else:
+            # For ghosts, use a simple collision detection that doesn't rely on direction.
+            # Assume walls are either horizontal or vertical.
+            if abs(self.y1 - self.y2) < abs(self.x1 - self.x2):  # horizontal wall
+                if min(self.x1, self.x2) <= entity.pos.x <= max(self.x1, self.x2) and abs(entity.pos.y - self.y1) <= entity.radius:
+                    entity.stop()
+                    return True
+            else:  # vertical wall
+                if min(self.y1, self.y2) <= entity.pos.y <= max(self.y1, self.y2) and abs(entity.pos.x - self.x1) <= entity.radius:
+                    entity.stop()
+                    return True
+            return False

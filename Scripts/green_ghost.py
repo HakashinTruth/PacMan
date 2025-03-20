@@ -85,5 +85,3 @@ class GreenGhost(Ghost):
             self.pos.y = self.height
 
                 
-                    
- 

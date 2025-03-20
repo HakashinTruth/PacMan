@@ -44,18 +44,12 @@ class Interaction:
         self.score = 0
 
     def update(self):
-        # Reset last collision
-        self.last_collision = None
-        
-        # Check for wall collisions
+        # Check wall collisions with Pac-Man first
         for wall in self.walls:
             if wall.hit(self.pacman):
-                # Stop Pac-Man when hitting a wall
                 self.pacman.stop()
                 self.last_collision = wall
-                
-                
-                # Broad collision handling
+                # Adjust Pac-Man's position based on the wall orientation
                 if wall.x1 == wall.x2:  # Vertical wall
                     if self.pacman.pos.x < wall.x1:
                         self.pacman.pos.x = wall.x1 - self.pacman.radius
@@ -66,54 +60,19 @@ class Interaction:
                         self.pacman.pos.y = wall.y1 - self.pacman.radius
                     else:
                         self.pacman.pos.y = wall.y1 + self.pacman.radius
-                
-                break  # Stop checking after first collision
-        
-        for wall in self.walls:
-            for ghost in self.ghosts:
-                if wall.hit(ghost):
-                    
-                    # Stop Pac-Man when hitting a wall
-                    ghost.stop()
-                    self.last_collision = wall
+                break  # Only process one wall collision per update
 
-                    if type(ghost) == OtherGhost:
-                        directions = ["left", "right", "up", "down"]
-                        newDirection = ghost.current_direction
-                        while newDirection == ghost.current_direction:
-                            newDirection = directions[random.randint(0,3)]
-                        ghost.current_direction = newDirection
-                    
-                    
-                    # Broad collision handling
-                    if wall.x1 == wall.x2:  # Vertical wall
-                        if ghost.pos.x < wall.x1:
-                            ghost.pos.x = wall.x1 - ghost.radius
-                        else:
-                            ghost.pos.x = wall.x1 + ghost.radius
-                    else:  # Horizontal wall
-                        if ghost.pos.y < wall.y1:
-                            ghost.pos.y = wall.y1 - ghost.radius
-                        else:
-                            ghost.pos.y = wall.y1 + ghost.radius
+        # Then check collision with points (iterate over a copy if you'll remove elements)
+        for point in self.points[:]:
+            if self.pacman.collidedWithPoint(point):
+                self.points.remove(point)
+                self.score += 10
 
-                            
-                    break
-
-                for point in self.points:
-                    if pacman.collidedWithPoint(point):
-                        self.points.remove(point)
-                        self.score += 10
-                
-                for ghost in self.ghosts:
-                    if pacman.collidedWithPoint(ghost):
-                        self.lives -= 1
-                        self.pacman.reset_position()
-                        #ghost.reset_position()
-
-
-                        
-
+        # Check collision with ghosts separately
+        for ghost in self.ghosts:
+            if self.pacman.collidedWithPoint(ghost):
+                self.lives -= 1
+                self.pacman.reset_position()
                 
 class Clock:
     def __init__(self, time=0):
@@ -161,14 +120,14 @@ arr=[
 # Keyboard and game setup
 kbd = Keyboard()
 clock = Clock()
-greenGhost = GreenGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,0), r"C:\Users\Student\OneDrive\Desktop\project\PacMan\pacmanPack\greenGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
-blueGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,0), r"C:\Users\Student\OneDrive\Desktop\project\PacMan\pacmanPack\redGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
-redGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,0), r"C:\Users\Student\OneDrive\Desktop\project\PacMan\pacmanPack\redGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
-orangeGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,0), r"C:\Users\Student\OneDrive\Desktop\project\PacMan\pacmanPack\orangeGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
+greenGhost = GreenGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,0), "https://i.postimg.cc/Xqysd90Q/green-Ghost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
+blueGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,0), "https://i.postimg.cc/bJS5H7xx/blue-Ghost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
+redGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,0), "https://i.postimg.cc/kXmHKhBS/redGhost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
+orangeGhost = OtherGhost(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), Vector(0,0), "https://i.postimg.cc/c4RVzGVT/orange-Ghost.png", 1, 8, CANVAS_WIDTH, CANVAS_HEIGHT)
 
 
 Ghosts = [blueGhost,redGhost, orangeGhost,greenGhost]
-pacman = PacMan(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/5), Vector(0, 0), kbd, r"C:\Users\Student\OneDrive\Desktop\project\PacMan\pacmanPack\PacMan.png", 1, 8,CANVAS_WIDTH,CANVAS_HEIGHT)
+pacman = PacMan(Vector(CANVAS_WIDTH/2, CANVAS_HEIGHT/5), Vector(0, 0), kbd, "https://i.postimg.cc/pTrGVgcN/PacMan.png", 1, 8,CANVAS_WIDTH,CANVAS_HEIGHT)
 Mg = MapGenerator(arr, CANVAS_WIDTH, CANVAS_HEIGHT)
 # Wall creation
 '''
@@ -185,7 +144,10 @@ walls = [
     Wall(4*CANVAS_WIDTH/5, 2*CANVAS_HEIGHT/3, CANVAS_WIDTH, 2*CANVAS_HEIGHT/3)  # Top middle section right
 ]'''
 interaction = Interaction(pacman, Ghosts, kbd, Mg.walls,Mg.square, Mg.points)
-
+#light = simplegui.load_image("https://i.ibb.co/M5K7ttPG/light-1.png")
+light = simplegui.load_image("https://i.ibb.co/21YDG7fm/light.png")
+image_width = light.get_width()
+image_height = light.get_height()
 def draw(canvas):
     interaction.update()
     for wall in Mg.walls:
@@ -194,7 +156,6 @@ def draw(canvas):
         sq.draw(canvas)
     for p in Mg.points:
         p.draw(canvas)
-
     canvas.draw_text("Lives remaining: " + str(interaction.lives), (10,18), 18, "White")
     canvas.draw_text("Score: " + str(interaction.score), (CANVAS_WIDTH -100,18), 18, "White")
     clock.tick()
@@ -205,12 +166,15 @@ def draw(canvas):
     # Handle movement and direction here
     
     for ghost in Ghosts:
-        if type(ghost) == GreenGhost:
-            ghost.update(pacman)
-        else:
-            ghost.update()
+        ghost.update(pacman)
         ghost.draw(canvas)
-
+    dest_center = (pacman.pos.x, pacman.pos.y)
+    canvas.draw_image(light,  # source
+                      (image_width/2, image_height/2),  # source center
+                      (image_width, image_height),      # source size
+                      dest_center,                      # destination center (pacman's position)
+                      (image_width, image_height),      # destination size
+                      0)                                # rotation (in radians)
     pacman.update()
     pacman.draw(canvas)
 

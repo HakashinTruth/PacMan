@@ -15,7 +15,7 @@ class PacMan:
         self.rotation = 0  # Initialize rotation (0 = facing right)
         self.current_direction = None  # No initial direction
         self.spriteimgs = Spritesheet(spriteimgs, rows, columns)
-        self.speed = 2  # Keep the 2x speed from previous update
+        self.speed = 4  # Keep the 2x speed from previous update
         self.radius = 16  # Increased from 16 to 20
         
         # Input rate control variables
@@ -90,12 +90,13 @@ class PacMan:
             self.pos.y = self.height
 
     def collidedWithPoint(self, entity):
-        xPac = self.pos.x
-        xEntity = entity.pos.x
-
-        yPac = self.pos.y
-        yEntity = entity.pos.y
-        return xPac < (xEntity + entity.radius*2) and (xPac + self.radius) > xEntity and yPac < (yEntity + entity.radius*2) and (yPac + self.radius) > yEntity
+        dx = self.pos.x - entity.pos.x
+        dy = self.pos.y - entity.pos.y
+        # Quick check: if either difference is greater than 50, skip further math
+        if abs(dx) > 20 or abs(dy) > 20:
+            return False
+        # Now do the distance check
+        return dx*dx + dy*dy <= 2500  # 50^2 = 2500
 
     def next_frame(self):
         self.spriteimgs.next_frame()
