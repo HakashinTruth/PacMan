@@ -4,7 +4,6 @@ from utils import Vector
  
 class Point:
     def __init__(self, pos, rows, columns, width, height):
-        print("Ghost initialized!")
         self.width = width
         self.height = height
         self.pos = pos

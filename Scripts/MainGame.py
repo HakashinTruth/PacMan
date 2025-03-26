@@ -156,8 +156,6 @@ def draw(canvas):
         sq.draw(canvas)
     for p in Mg.points:
         p.draw(canvas)
-    canvas.draw_text("Lives remaining: " + str(interaction.lives), (10,18), 18, "White")
-    canvas.draw_text("Score: " + str(interaction.score), (CANVAS_WIDTH -100,18), 18, "White")
     clock.tick()
     if clock.transition(FRAME_DURATION):
         pacman.next_frame()
@@ -177,6 +175,8 @@ def draw(canvas):
                       0)                                # rotation (in radians)
     pacman.update()
     pacman.draw(canvas)
+    canvas.draw_text("Lives remaining: " + str(interaction.lives), (10,18), 18, "White")
+    canvas.draw_text("Score: " + str(interaction.score), (CANVAS_WIDTH -100,18), 18, "White")
 
     #print(ghost.current_direction, " ", ghost.vel)
 
