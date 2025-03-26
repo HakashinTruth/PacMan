@@ -83,47 +83,49 @@ class Keyboard:
             self.down = True
 
 class Interaction:
-    
     def __init__(self, pacman, ghosts, keyboard, walls, squares, points):
         self.pacman = pacman
         self.ghosts = ghosts
         self.keyboard = keyboard
         self.walls = walls
         self.points = points
-        self.last_collision = None  # Track the last wall collided with
+        self.last_collision = None
         self.lives = 1
         self.score = 0
 
     def update(self):
-        # Check wall collisions with Pac-Man first
+        global game_state
         for wall in self.walls:
             if wall.hit(self.pacman):
                 self.pacman.stop()
                 self.last_collision = wall
-                # Adjust Pac-Man's position based on the wall orientation
-                if wall.x1 == wall.x2:  # Vertical wall
+                if wall.x1 == wall.x2:
                     if self.pacman.pos.x < wall.x1:
                         self.pacman.pos.x = wall.x1 - self.pacman.radius
                     else:
                         self.pacman.pos.x = wall.x1 + self.pacman.radius
-                else:  # Horizontal wall
+                else:
                     if self.pacman.pos.y < wall.y1:
                         self.pacman.pos.y = wall.y1 - self.pacman.radius
                     else:
                         self.pacman.pos.y = wall.y1 + self.pacman.radius
-                break  # Only process one wall collision per update
+                break
 
-        # Then check collision with points (iterate over a copy if you'll remove elements)
         for point in self.points[:]:
             if self.pacman.collidedWithPoint(point):
                 self.points.remove(point)
                 self.score += 10
 
-        # Check collision with ghosts separately
+        if len(self.points) == 0:
+            game_state = WIN
+
         for ghost in self.ghosts:
             if self.pacman.collidedWithPoint(ghost):
                 self.lives -= 1
                 self.pacman.reset_position()
+
+        if self.lives < 0:
+            game_state = LOSE
 
 class Clock:
     def __init__(self, time=0):
@@ -163,33 +165,22 @@ def draw_menu(canvas):
 
 def draw_playing(canvas):
     interaction.update()
-    for wall in Mg.walls:
-        wall.draw(canvas)
-    for sq in Mg.square:
-        sq.draw(canvas)
-    for p in Mg.points:
-        p.draw(canvas)
+    for wall in Mg.walls: wall.draw(canvas)
+    for sq in Mg.square: sq.draw(canvas)
+    for p in Mg.points: p.draw(canvas)
     clock.tick()
     if clock.transition(10):
         pacman.next_frame()
-        for ghost in Ghosts:
-            ghost.next_frame()
-    # Handle movement and direction here
-    
+        for ghost in Ghosts: ghost.next_frame()
     for ghost in Ghosts:
         ghost.update(pacman)
         ghost.draw(canvas)
     dest_center = (pacman.pos.x, pacman.pos.y)
-    canvas.draw_image(light,  # source
-                      (image_width/2, image_height/2),  # source center
-                      (image_width, image_height),      # source size
-                      dest_center,                      # destination center (pacman's position)
-                      (image_width, image_height),      # destination size
-                      0)                                # rotation (in radians)
+    canvas.draw_image(light, (image_width/2, image_height/2), (image_width, image_height), dest_center, (image_width, image_height), 0)
     pacman.update()
     pacman.draw(canvas)
     canvas.draw_text("Lives remaining: " + str(interaction.lives), (10,18), 18, "White")
-    canvas.draw_text("Score: " + str(interaction.score), (CANVAS_WIDTH -100,18), 18, "White")
+    canvas.draw_text("Score: " + str(interaction.score), (CANVAS_WIDTH - 100,18), 18, "White")
 
 def draw_paused(canvas):
     canvas.draw_polygon([[0, 0], [500, 0], [500, 400]], 1, "Black", "Black")

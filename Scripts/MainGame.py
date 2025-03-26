@@ -1,3 +1,4 @@
+#draft of main game
 import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 import math
 import random
